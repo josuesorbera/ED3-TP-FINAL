@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include "LPC17xx.h"
-#include "lpc17xx_i2c.h"
-
-#define LCD_ADDRESS 0x4E // Dirección típica del LCD I2C (ajusta según tu dispositivo)
+#include "I2C.h"
 
 // Configuration that needs to be checked before using
 

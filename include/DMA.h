@@ -1,15 +1,15 @@
-#ifndef ADC_H
-#define ADC_H
+#ifndef DMA_H
+#define DMA_H
 
 // Libraries inclusion
 #include <stdio.h>
 #include "LPC17xx.h"
-#include "lpc17xx_adc.h"
+#include "lpc17xx_gpdma.h"
 
 // Macro definitions
 
 
 // Function prototypes
-void ADC_Config(void);
+void DMA_Config(void);
 
-#endif // ADC_H
+#endif // DMA_H

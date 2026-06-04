@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "LPC17xx.h"
-#include "lpc17xx_adc.h"
+#include "ADC.h"
 
 void ADC_Config(void) {
     ADC_Init(200000); // ADC clock is 200KHz

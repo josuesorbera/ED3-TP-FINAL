@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "LPC17xx.h"
-#include "lpc17xx_gpdma.h"
+#include "DMA.h"
 
 void DMA_Config(void){
     GPDMA_Channel_CFG_T dmaCfg = {0}; // Preliminar values for the DMA channel configuration

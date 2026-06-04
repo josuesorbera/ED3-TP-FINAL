@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "LPC17xx.h"
-#include "lpc17xx_uart.h"
+#include "UART.h"
 
 void UART_Config(void) {
 

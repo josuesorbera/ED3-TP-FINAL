@@ -1,15 +1,15 @@
-#ifndef ADC_H
-#define ADC_H
+#ifndef UART_H
+#define UART_H
 
 // Libraries inclusion
 #include <stdio.h>
 #include "LPC17xx.h"
-#include "lpc17xx_adc.h"
+#include "lpc17xx_uart.h"
 
 // Macro definitions
 
 
 // Function prototypes
-void ADC_Config(void);
+void UART_Config(void);
 
-#endif // ADC_H
+#endif // UART_H

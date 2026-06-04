@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "LPC17xx.h"
-#include "lpc17xx_timer.h"
+#include "TIMER_PWM.h"
 
 void TIMER_PWM_Config(void) {
      TIMER_CFG_T timCfg = {0} // Preliminar values for the timer

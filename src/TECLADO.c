@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include "LPC17xx.h"
-#include "lpc17xx_gpio.h"
-#include "lpc17xx_pinsel.h"
-#include "lpc17xx_exti.h" // Included but we are not sure if we will use it
+#include "TECLADO.h"
 
 void TECLADO_Config(void) {
     // Configure rows as outputs
