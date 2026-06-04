@@ -6,8 +6,12 @@
 #include "LPC17xx.h"
 #include "lpc17xx_i2c.h"
 
-// Macro definitions
-#define LCD_ADDRESS 0x4E // Typical address
+// Macro definitions (address and control bits for PCF8574)
+#define LCD_ADDRESS 0x4E // Typical address for PCF8574 (0x27 shifted left by 1 bit)
+#define RS_PIN 0x01 // 0=Command, 1=Data (1 shifted left by 0 bits)
+#define RW_PIN 0x02  // Read/Write (always in 0 for writing to LCD) (1 shifted left by 1 bit)
+#define EN_PIN 0x04  // Enable pulse (1 shifted left by 2 bits)
+#define BL_PIN 0x08  // 1=Backlight on (1 shifted left by 3 bits)
 
 // Function prototypes
 void DMA_Config(void);
