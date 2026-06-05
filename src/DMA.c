@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "DMA.h"
 
-void cfgGPDMA(GPDMA_LLI_T* lli){
+void DMA_Config(GPDMA_LLI_T* lli){
 	GPDMA_Init();
 
 	GPDMA_Endpoint_T endCfg = {0};

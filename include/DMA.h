@@ -10,6 +10,6 @@
 
 
 // Function prototypes
-void DMA_Config(void);
+void DMA_Config(GPDMA_LLI_T* lli);
 
 #endif // DMA_H

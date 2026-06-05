@@ -14,7 +14,7 @@
 #define BL_PIN 0x08  // 1=Backlight on (1 shifted left by 3 bits)
 
 // Function prototypes
-void DMA_Config(void);
+void I2C_Config(void);
 void LCD_Send_Byte(uint8_t data, uint8_t mode);
 void LCD_Send_String(char* str);
 

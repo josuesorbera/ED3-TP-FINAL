@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include "LPC17xx.h"
 
-void cfgGPDMA(GPDMA_LLI_T* lli);
-void UART_Config(void);
-//completar con las demas funciones
 GPDMA_LLI_T lli;
-
 
 int main(void) {
 	//inicializar lli en 0 y luego asignarle los valores
@@ -19,6 +15,7 @@ int main(void) {
     UART_Config();
     TECLADO_Config();
     TIMER_PWM_Config();
+    I2C_Config();
     ADC_Config();
     DAC_Config();
     DMA_Config(GPDMA_LLI_T* lli);
