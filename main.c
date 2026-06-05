@@ -20,6 +20,7 @@ int main(void) {
     TECLADO_Config();
     TIMER_PWM_Config();
     ADC_Config();
+    DAC_Config();
     DMA_Config(GPDMA_LLI_T* lli);
 
     while (1) {
