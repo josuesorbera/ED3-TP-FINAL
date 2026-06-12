@@ -18,5 +18,5 @@ extern volatile uint8_t flag_teclado;
 void TECLADO_Config(void);
 void EINT3_IRQHandler(void);
 void SysTick_Handler(void);
-void modo_DeepSleep(void);
+void modo_Sleep(void);
 #endif
