@@ -66,6 +66,7 @@ void SysTick_Handler(void) {
     GPIO_SetPins(PORT_2, (1 << 0));   // fila 1 a 3.3V
     GPIO_ClearPins(PORT_2, (1 << 1)); // fila 2 a 0V
 
+	PINSEL_ConfigMultiplePins(&configRow, 3); //Configuro GPIO en P2[0] y P2[1]
 
     puerto = GPIO_ReadValue(PORT_2); //lectura valor puerto 2
 
@@ -105,22 +106,15 @@ void SysTick_Handler(void) {
         //habilito nuevamente las interrupciones por Puerto 2 para volver a leer el teclado
         NVIC_EnableIRQ(EINT3_IRQn);
 
-    }
-}
 
-void mode_DeepSleep(void) {
-    GPIO_ClearPins(PORT_2, 3); //dejo filas en 0 para leer botones
+void mode_Sleep(void) { //activo modo sleep en la LPC, se despierta con cualquier interrupcion por Puerto 2
+    GPIO_ClearPins(PORT_2, 3); //filas en 0 para leer botón
+    CLKPWR_Sleep(); //modo sleep
 
-    SCB->SCR |= (1 << 2); //activo modo deep sleep
-    __WFI();
-
-    //al detectar un botón...
-    SCB->SCR &= ~(1 << 2); //sale modo deep sleep
-
+    //al despertar, bucle para no realizar acción del primer boton pulsado
     while (flag_teclado == 0) {
-    } //bucle para evitar lectura del primer boton pulsado
-
-    flag_teclado = 0;
+    }
+    flag_teclado = 0; //pulsacion descartada
 }
 
 void choose_Action(void) {
@@ -133,7 +127,7 @@ void choose_Action(void) {
                 ADC_PowerDown(); //apagar ADC
             break;
             case 3 :
-                mode_DeepSleep(); //"apagar" LPC
+                modo_Sleep(); //"apagar" LPC
             break;
         }
     }
