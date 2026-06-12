@@ -11,5 +11,6 @@
 
 // Function prototypes
 void ADC_Config(void);
-
+static uint32_t adc_read_blocking(void)
+static uint32_t map_adc_to_pulse(uint32_t adc_val)
 #endif // ADC_H
