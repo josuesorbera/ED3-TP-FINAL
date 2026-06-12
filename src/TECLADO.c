@@ -106,7 +106,7 @@ void SysTick_Handler(void) {
     }
 }
 
-void modo_DeepSleep(void) {
+void mode_DeepSleep(void) {
     GPIO_ClearPins(PORT_2, 3); //dejo filas en 0 para leer botones
 
     SCB->SCR |= (1 << 2); //activo modo deep sleep
@@ -119,4 +119,21 @@ void modo_DeepSleep(void) {
     } //bucle para evitar lectura del primer boton pulsado
 
     flag_teclado = 0;
+}
+
+void choose_Action(void) {
+    if (flag_teclado == 1) {
+        switch (tecla_presionada) {
+            case 1 :
+                ADC_PowerUp(); //encender ADC
+            break;
+            case 2 :
+                ADC_PowerDown(); //apagar ADC
+            break;
+            case 3 :
+                mode_DeepSleep(); //"apagar" LPC
+            break;
+    }
+
+    flag_teclado = 0; // bajo la bandera
 }

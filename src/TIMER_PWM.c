@@ -26,35 +26,39 @@ void TIMER_PWM_Config(void) {
      match1Cfg.extOpt = TIM_NOTHING;
      match1Cfg.matchValue = 1500; // 1.5ms (neutral position for the servo)
 
-     TIM_ConfigMatch(LPC_TIM0, &match0Cfg) // The PWM implements two match channels, one for the period and another for the duty cycle,
-     TIM_ConfigMatch(LPC_TIM0, &match1Cfg) // one with reset and the other without, so the timer counter is reset on match0 and match1 is used to control the duty cycle.
+     TIM_ConfigMatch(LPC_TIM0, &match0Cfg); // The PWM implements two match channels, one for the period and another for the duty cycle,
+     TIM_ConfigMatch(LPC_TIM0, &match1Cfg); // one with reset and the other without, so the timer counter is reset on match0 and match1 is used to control the duty cycle.
 
      NVIC_EnableIRQ(TIMER0_IRQn);
+     NVIC_SetPriority(TIMER0_IRQn, 0); // Set a priority for the timer interrupt
      TIM_Enable(LPC_TIM0);
 }
 
 void servo_GPIO(void) {
      GPIO_SetDir(PORT_0, (1 << 10), GPIO_OUTPUT); // Set the pin (P0.10) as output
+     GPIO_ClearPins(PORT_0, (1 << 10));
 }
 
-// Function to give the position to the servo (0-180 grados)
-void servo_Position(uint8_t angle) {
-     if (angle > 180) angle = 180; // Limit the angle to 180 degrees
-     uint32_t pulseWidth = 1000 + ((uint32_t)angle * 1000 / 180);
-
-     TIM_UpdateMatchValue(LPC_TIM0, TIM_MATCH_1, pulseWidth);
+// Function to move the servo based on joystick ADC value (0-4095)
+void servo_Position(uint16_t adcValue) {
+	if(adcValue > 4095){
+	   adcValue = 4095;
+	}
+    // Map the ADC value to a pulse width between 1ms (1000us) and 2ms (2000us)
+	pulseWidth = 1000 + (((uint32_t)adcValue * 1000) / 4095);
 }
 
 void TIMER0_IRQHandler(void) {
      if (TIM_GetIntStatus(LPC_TIM0, TIM_MR0_INT)) {
           // Begin of the period
-          GPIO_SetPinState(PORT_0, (1 << 10), SET);  // Pulse in HIGH on MR0
+          GPIO_SetPins(PORT_0, (1 << 10));  // Pulse in HIGH on MR0
           TIM_ClearIntPending(LPC_TIM0, TIM_MR0_INT);
      }
 
      if (TIM_GetIntStatus(LPC_TIM0, TIM_MR1_INT)) {
           // End of the pulse
-          GPIO_SetPinState(PORT_0, (1 << 10), 0);  // Pulse in LOW on MR1
+          GPIO_ClearPins(PORT_0, (1 << 10)); // Pulse in LOW on MR1
+          TIM_UpdateMatchValue(LPC_TIM0, TIM_MATCH_1, pulseWidth);
           TIM_ClearIntPending(LPC_TIM0, TIM_MR1_INT);
      }
 }

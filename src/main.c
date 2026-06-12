@@ -1,5 +1,11 @@
 #include <stdio.h>
 #include "LPC17xx.h"
+#include "TIMER_PWM.h"
+#include "ADC.h"
+#include "UART.h"
+#include "TECLADO.h"
+#include "I2C.h"
+#include "DMA.h"
 
 GPDMA_LLI_T lli;
 
@@ -15,28 +21,16 @@ int main(void) {
     UART_Config();
     TECLADO_Config();
     TIMER_PWM_Config();
+    servo_GPIO();
     I2C_Config();
     ADC_Config();
-    DAC_Config();
     DMA_Config(GPDMA_LLI_T* lli);
 
     while (1) {
-	    if (flag_teclado == 1) {
-	    	switch (tecla_presionada) {
-	    		case 1 :
-	    			ADC_PowerUp(); //encender ADC
-	    			break;
-	    		case 2 :
-	    			ADC_PowerDown(); //apagar ADC
-	    			break;
-	    		case 3 :
-	    			modo_DeepSleep(); //"apagar" LPC
-	    			break;
-	    	}
-
-	    	flag_teclado = 0; // bajo la bandera
-	    }
+        get_ADC_Value(); // Read the ADC value and update the servo position accordingly
+        choose_Action(); // Check if a button was pressed and perform the corresponding action
     }
+
     return 0;
 }
 
