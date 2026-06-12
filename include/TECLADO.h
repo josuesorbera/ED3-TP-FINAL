@@ -1,16 +1,18 @@
 #ifndef TECLADO_H
 #define TECLADO_H
 
-// Libraries inclusion
+//librerias
 #include "LPC17xx.h"
 #include "lpc17xx_gpio.h"
 #include "lpc17xx_pinsel.h"
-#include "lpc17xx_exti.h" // Included but we are not sure if we will use it
+#include "lpc17xx_systick.h"
 
-// Macro definitions
+//variables en TECLADO.c
+extern volatile uint8_t tecla_presionada;
+extern volatile uint8_t flag_teclado;
 
 
-// Function prototypes
+//prototipos de funcion
 void TECLADO_Config(void);
 
-#endif // TECLADO_H
+#endif

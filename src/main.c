@@ -21,15 +21,13 @@ int main(void) {
     DMA_Config(GPDMA_LLI_T* lli);
 
     while (1) {
+	    if (flag_teclado == 1) {
+		    // funciones de los botones, con un switch-case?
+
+	    	flag_teclado = 0; // bajo la bandera
+	    }
     }
-
     return 0;
-}
-
-void EINT3_IRQHandler(void){
-    // Handle the external interrupt for the keypad here
-    // This function will be called when a key is pressed (falling edge on column pins)
-    // You can read the state of the rows to determine which key was pressed
 }
 
 
