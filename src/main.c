@@ -22,7 +22,17 @@ int main(void) {
 
     while (1) {
 	    if (flag_teclado == 1) {
-		    // funciones de los botones, con un switch-case?
+	    	switch (tecla_presionada) {
+	    		case 1 :
+	    			ADC_PowerUp(); //encender ADC
+	    			break;
+	    		case 2 :
+	    			ADC_PowerDown(); //apagar ADC
+	    			break;
+	    		case 3 :
+	    			modo_DeepSleep(); //"apagar" LPC
+	    			break;
+	    	}
 
 	    	flag_teclado = 0; // bajo la bandera
 	    }

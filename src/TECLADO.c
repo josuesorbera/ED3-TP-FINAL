@@ -106,4 +106,17 @@ void SysTick_Handler(void) {
     }
 }
 
+void modo_DeepSleep(void) {
+    GPIO_ClearPins(PORT_2, 3); //dejo filas en 0 para leer botones
 
+    SCB->SCR |= (1 << 2); //activo modo deep sleep
+    __WFI();
+
+    //al detectar un botón...
+    SCB->SCR &= ~(1 << 2); //sale modo deep sleep
+
+    while (flag_teclado == 0) {
+    } //bucle para evitar lectura del primer boton pulsado
+
+    flag_teclado = 0;
+}
