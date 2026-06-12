@@ -105,9 +105,10 @@ void SysTick_Handler(void) {
 
         //habilito nuevamente las interrupciones por Puerto 2 para volver a leer el teclado
         NVIC_EnableIRQ(EINT3_IRQn);
+    }
+}
 
-
-void mode_Sleep(void) { //activo modo sleep en la LPC, se despierta con cualquier interrupcion por Puerto 2
+void modo_Sleep(void) { //activo modo sleep en la LPC, se despierta con cualquier interrupcion por Puerto 2
     GPIO_ClearPins(PORT_2, 3); //filas en 0 para leer botón
     CLKPWR_Sleep(); //modo sleep
 
