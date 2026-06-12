@@ -28,6 +28,7 @@ void TECLADO_Config(void) {
 
 	GPIO_IntConfigPort(PORT_2, (3 << 2), GPIO_INT_FALLING);
 	NVIC_EnableIRQ(EINT3_IRQn); //habilito interrupcion por flanco de bajada en P2.2 y P2.2
+    NVIC_SetPriority(EINT3_IRQn, 1); //seteo prioridad de la interrupcion del teclado
 }
 
 //handler para cuando detecta un boton presionado
@@ -103,6 +104,7 @@ void SysTick_Handler(void) {
 
         //habilito nuevamente las interrupciones por Puerto 2 para volver a leer el teclado
         NVIC_EnableIRQ(EINT3_IRQn);
+
     }
 }
 
@@ -133,6 +135,7 @@ void choose_Action(void) {
             case 3 :
                 mode_DeepSleep(); //"apagar" LPC
             break;
+        }
     }
 
     flag_teclado = 0; // bajo la bandera

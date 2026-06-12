@@ -13,10 +13,10 @@
 extern volatile uint8_t tecla_presionada;
 extern volatile uint8_t flag_teclado;
 
-
 // Function prototypes
 void TECLADO_Config(void);
 void EINT3_IRQHandler(void);
 void SysTick_Handler(void);
 void modo_DeepSleep(void);
+void choose_Action(void);
 #endif

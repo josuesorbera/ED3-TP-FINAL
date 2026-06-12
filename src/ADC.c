@@ -22,12 +22,3 @@ void get_ADC_Value(void)
     }
 }
 
-static uint32_t adc_read_blocking(void){
-    ADC_StartCmd(ADC_START_NOW);
-    while (ADC_ChannelGetStatus(ADC_CHANNEL_0, ADC_DATA_DONE) == RESET);
-    return (uint32_t)ADC_ChannelGetData(ADC_CHANNEL_0);
-}
-
-static uint32_t map_adc_to_pulse(uint32_t adc_val){
-    return PULSE_MIN_US + (adc_val * (PULSE_MAX_US - PULSE_MIN_US)) / ADC_MAX;
-}
