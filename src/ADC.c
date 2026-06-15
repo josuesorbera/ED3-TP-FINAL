@@ -6,7 +6,6 @@ void ADC_Config(void) {
     ADC_PinConfig(ADC_CHANNEL_0);       // Configure pin for channel 0
     ADC_ChannelEnable(ADC_CHANNEL_0);   // Enable channel 0
     ADC_StartCmd(ADC_START_CONTINUOUS); // Start continuous conversion
-    ADC_BurstEnable();                  // Enable burst mode
     ADC_PowerDown();                    // Iniciates turned off so we can can start it with a button
 }
 

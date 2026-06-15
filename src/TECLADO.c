@@ -34,7 +34,7 @@ void TECLADO_Config(void) {
 // handler para cuando detecta un boton presionado
 void EINT3_IRQHandler(void) {
     NVIC_DisableIRQ(EINT3_IRQn); // deshabilito interrupciones para no detectar "ruido" mientras
-                                 // espero al systick
+                                 // espero al SysTick
 
     GPIO_ClearInt(PORT_2, (1 << 2)); // levanto flag de columna 1
     GPIO_ClearInt(PORT_2, (1 << 3)); // levanto flag de columna 2
@@ -49,29 +49,22 @@ void SysTick_Handler(void) {
 
     uint8_t estado_actual = 0xFF; // inicializo la variable en 0xFF para evitar lecturas incorrectas
 
-    // escaneo fila 2
-    GPIO_ClearPins(PORT_2, (1 << 0)); // fila 1 a 0V
-    GPIO_SetPins(PORT_2, (1 << 1));   // fila 2 a 3.3V
+    //escaneo fila 1
+    GPIO_SetPins(PORT_2, (1 << 0));
+    GPIO_ClearPins(PORT_2, (1 << 1));
 
-    uint32_t puerto = GPIO_ReadValue(PORT_2); // lectura valor puerto 2
+    uint32_t puerto = GPIO_ReadValue(PORT_2);
+    if ((puerto & (1 << 2)) == 0) estado_actual = 1;      // F1-C1
+    else if ((puerto & (1 << 3)) == 0) estado_actual = 3; // F1-C2
 
-    if ((puerto & (1 << 2)) == 0) {
-        estado_actual = 3; // columna 1
-    } else if ((puerto & (1 << 3)) == 0) {
-        estado_actual = 4; // columna 2
-    }
+    //escaneo fila 2
+    GPIO_ClearPins(PORT_2, (1 << 0));
+    GPIO_SetPins(PORT_2, (1 << 1));
 
-    // escaneo fila 1
-    GPIO_SetPins(PORT_2, (1 << 0));   // fila 1 a 3.3V
-    GPIO_ClearPins(PORT_2, (1 << 1)); // fila 2 a 0V
+    puerto = GPIO_ReadValue(PORT_2);
+    if ((puerto & (1 << 2)) == 0) estado_actual = 2;      // F2-C1
+    else if ((puerto & (1 << 3)) == 0) estado_actual = 4; // F2-C2
 
-    puerto = GPIO_ReadValue(PORT_2); // lectura valor puerto 2
-
-    if ((puerto & (1 << 2)) == 0) {
-        estado_actual = 1; // columna 1
-    } else if ((puerto & (1 << 3)) == 0) {
-        estado_actual = 2; // columna 2
-    }
 
     // logica para bloqueo por pulsacion mantenida
     if (estado_actual != 0xFF) { // si se pulso un boton, ingresa al if
@@ -103,28 +96,18 @@ void SysTick_Handler(void) {
     }
 }
 
-void modo_Sleep(
-    void) { // activo modo sleep en la LPC, se despierta con cualquier interrupcion por Puerto 2
-    GPIO_ClearPins(PORT_2, 3); // filas en 0 para leer botón
-    CLKPWR_Sleep();            // modo sleep
-
-    // al despertar, bucle para no realizar acción del primer boton pulsado
-    while (flag_teclado == 0) {
-    }
-    flag_teclado = 0; // pulsacion descartada
-}
-
 void choose_Action(void) {
     if (flag_teclado == 1) {
         switch (tecla_presionada) {
             case 1:
-                ADC_PowerUp(); // encender ADC
+				ADC_PowerUp();
+                ADC_BurstEnable(); // encender ADC
                 break;
             case 2:
-                ADC_PowerDown(); // apagar ADC
+                ADC_BurstDisable(); // apagar ADC
                 break;
             case 3:
-                modo_Sleep(); //"apagar" LPC
+                //Mensaje de Aviso
                 break;
         }
     }
