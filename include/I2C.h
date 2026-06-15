@@ -21,7 +21,7 @@ typedef enum {
 
 // Function prototypes
 void I2C_Config(void);
-void I2C_Write(uint8_t data)
+void I2C_Write(uint8_t data);
 void LCD_Init(void);
 void LCD_Send_Byte(uint8_t data, uint8_t mode);
 void LCD_Send_String(char *str);

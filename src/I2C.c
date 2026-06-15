@@ -121,3 +121,17 @@ void LCD_Update_Status(system_state_t state) {
 system_state_t LCD_Get_Current_State(void) {
     return current_state;
 }
+
+void LCD_Init(void) {
+    // Secuencia de reseteo en modo 4 bits
+    LCD_Send_Byte(0x03, 0);
+    LCD_Send_Byte(0x03, 0);
+    LCD_Send_Byte(0x03, 0);
+    LCD_Send_Byte(0x02, 0);
+
+    // Configuración del LCD
+    LCD_Send_Byte(0x28, 0); // 2 líneas, matriz 5x8
+    LCD_Send_Byte(0x0C, 0); // Display ON, Cursor OFF
+    LCD_Send_Byte(0x06, 0); // Incremento de cursor
+    LCD_Send_Byte(0x01, 0); // Limpiar pantalla
+}
