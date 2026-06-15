@@ -24,6 +24,7 @@ int main(void) {
     TIMER_PWM_Config();
     servo_GPIO();
     I2C_Config();
+    LCD_Init();
     ADC_Config();
     DMA_Config(&lli);
 

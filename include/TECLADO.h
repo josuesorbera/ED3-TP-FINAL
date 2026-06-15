@@ -19,6 +19,5 @@ void TECLADO_Config(void);
 void EINT3_IRQHandler(void);
 void SysTick_Handler(void);
 void choose_Action(void);
-void mode_Sleep(void);
 
 #endif// TECLADO_H
