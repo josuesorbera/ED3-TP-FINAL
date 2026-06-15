@@ -12,10 +12,17 @@
 #define RW_PIN 0x02  // Read/Write (always in 0 for writing to LCD) (1 shifted left by 1 bit)
 #define EN_PIN 0x04  // Enable pulse (1 shifted left by 2 bits)
 #define BL_PIN 0x08  // 1=Backlight on (1 shifted left by 3 bits)
+typedef enum {
+    SYSTEM_ON,
+    SYSTEM_OFF,
+    POSITION_SET
+} system_state_t; // Define an enum for system states
 
 // Function prototypes
 void I2C_Config(void);
 void LCD_Send_Byte(uint8_t data, uint8_t mode);
 void LCD_Send_String(char* str);
+void LCD_Update_Status(system_state_t state);
+system_state_t LCD_Get_Current_State(void);
 
 #endif // I2C_H

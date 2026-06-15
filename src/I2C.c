@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "I2C.h"
 
+static system_state_t current_state = SYSTEM_OFF;
+
 // Initialize function for I2C
 void I2C_Config(void){
     I2C_Init(LPC_I2C1, 100000); // Inicialize I2C1 a 100kHz
@@ -35,9 +37,47 @@ void LCD_Send_String(char* str){
     }
 }
 
-// Show angle of the servo on the LCD
-void LCD_Display_Servo_Angle(float angle){
-    char buffer[20];
-    sprintf(buffer, "Angle: %.1f", angle);
-    LCD_Send_String(buffer);
+void LCD_Set_Cursor(uint8_t row, uint8_t col) {
+    uint8_t address = (row == 0) ? 0x80 : 0xC0;
+    LCD_Send_Byte(address + col, 0);
+}
+
+// Function to update LCD based on system state
+void LCD_Update_Status(system_state_t state) {
+    current_state = state;
+    LCD_Set_Cursor(0, 0);
+    LCD_Send_String("                "); // Limpiar línea
+
+    LCD_Set_Cursor(0, 0);
+
+    switch(state) {
+        case SYSTEM_ON:
+            LCD_Send_String("VIGILANCIA ON");
+            LCD_Set_Cursor(1, 0);
+            LCD_Send_String("                "); // Limpiar línea
+            LCD_Set_Cursor(1, 0);
+            LCD_Send_String("ADC: ACTIVO");
+        break;
+
+        case SYSTEM_OFF:
+            LCD_Send_String("SISTEMA APAGADO");
+            LCD_Set_Cursor(1, 0);
+            LCD_Send_String("                "); // Limpiar línea
+            LCD_Set_Cursor(1, 0);
+            LCD_Send_String("Sleep Mode");
+        break;
+
+        case POSITION_SET:
+            LCD_Send_String("POSICION FIJADA");
+            LCD_Set_Cursor(1, 0);
+            LCD_Send_String("                "); // Limpiar línea
+            LCD_Set_Cursor(1, 0);
+            LCD_Send_String("ADC: APAGADO");
+        break;
+    }
+}
+
+// Function to get the current system state
+system_state_t LCD_Get_Current_State(void) {
+    return current_state;
 }

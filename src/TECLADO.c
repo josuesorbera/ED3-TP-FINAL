@@ -122,12 +122,15 @@ void choose_Action(void) {
     if (flag_teclado == 1) {
         switch (tecla_presionada) {
             case 1 :
+                LCD_Update_Status(SYSTEM_ON); //actualizo LCD a modo vigilancia
                 ADC_PowerUp(); //encender ADC
             break;
             case 2 :
+                LCD_Update_Status(POSITION_SET); //actualizo LCD a modo sistema apagado
                 ADC_PowerDown(); //apagar ADC
             break;
             case 3 :
+                LCD_Update_Status(SYSTEM_OFF); //actualizo LCD a modo sistema apagado
                 modo_Sleep(); //"apagar" LPC
             break;
         }
