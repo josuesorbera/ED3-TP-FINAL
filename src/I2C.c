@@ -35,6 +35,29 @@ void I2C_Write(uint8_t data){
     I2C_MasterTransferData(LPC_I2C1, &txsetup, I2C_TRANSFER_POLLING);
 }
 
+// Initialize the LCD
+void LCD_Init(void) {
+    // Reset sequence
+    LCD_Send_Byte(0x03, 0);
+    LCD_Send_Byte(0x03, 0);
+    LCD_Send_Byte(0x03, 0);
+    LCD_Send_Byte(0x02, 0);
+
+    /*
+    for(volatile uint32_t i=0;i<1000000;i++);
+    LCD_Send_Byte(0x33,0);
+    for(volatile uint32_t i=0;i<50000;i++);
+    LCD_Send_Byte(0x32,0);
+    for(volatile uint32_t i=0;i<50000;i++);
+	*/    
+
+    // LCD configuration
+    LCD_Send_Byte(0x28, 0); // 2 lines, 5x8 font
+    LCD_Send_Byte(0x0C, 0); // Display ON, cursor OFF
+    LCD_Send_Byte(0x06, 0); // Increment cursor
+    LCD_Send_Byte(0x01, 0); // Clear display
+}
+
 // Send byte to the PCF8574
 void LCD_Send_Byte(uint8_t data, uint8_t mode){
     uint8_t high_nibble = data & 0xF0;
@@ -120,18 +143,4 @@ void LCD_Update_Status(system_state_t state) {
 // Function to get the current system state
 system_state_t LCD_Get_Current_State(void) {
     return current_state;
-}
-
-void LCD_Init(void) {
-    // Secuencia de reseteo en modo 4 bits
-    LCD_Send_Byte(0x03, 0);
-    LCD_Send_Byte(0x03, 0);
-    LCD_Send_Byte(0x03, 0);
-    LCD_Send_Byte(0x02, 0);
-
-    // Configuración del LCD
-    LCD_Send_Byte(0x28, 0); // 2 líneas, matriz 5x8
-    LCD_Send_Byte(0x0C, 0); // Display ON, Cursor OFF
-    LCD_Send_Byte(0x06, 0); // Incremento de cursor
-    LCD_Send_Byte(0x01, 0); // Limpiar pantalla
 }

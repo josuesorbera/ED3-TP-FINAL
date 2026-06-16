@@ -9,8 +9,7 @@ void UART_Config(void) {
     UARTcfg.dataBits = UART_DBITS_8;
     UARTcfg.stopBits = UART_STOPBIT_1;
 
-    UART_FIFO_CFG_T fifo_cfg = {
-        .resetRxBuf = ENABLE, .resetTxBuf = ENABLE, .dmaMode = DISABLE, .level = UART_FIFO_TRGLEV0};
+    UART_FIFO_CFG_T fifo_cfg = {.resetRxBuf = ENABLE, .resetTxBuf = ENABLE, .dmaMode = DISABLE, .level = UART_FIFO_TRGLEV0};
 
     UART_PinConfig(UART_TX0_P0_2);
     UART_PinConfig(UART_RX0_P0_3);
@@ -29,6 +28,7 @@ static void uart_send_data(uint16_t adc_val, uint32_t pulse_us) {
     buf[idx++] = ':';
     idx += uint32_to_str((uint32_t)adc_val, &buf[idx]);
     buf[idx++] = ',';
+    buf[idx++] = ' ';
     buf[idx++] = 'P';
     buf[idx++] = 'W';
     buf[idx++] = 'M';

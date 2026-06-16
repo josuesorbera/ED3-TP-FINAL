@@ -15,8 +15,7 @@ int main(void) {
     lli.srcAddr = (uint32_t)&LPC_ADC->ADDR0;
     lli.dstAddr = (uint32_t)&LPC_DAC->DACR;
     lli.nextLLI = (uint32_t)&lli; // la apunto a si misma, luego de inicializarla
-    lli.control =
-        (4095 | 1 << 18 | 1 << 21); // 4095 datos, dato halfword en source(18) y destination (21)
+    lli.control = (4095 | 1 << 18 | 1 << 21); // 4095 datos, dato halfword en source(18) y destination (21)
 
     // Call the configuration functions for each peripheral
     UART_Config();
@@ -29,8 +28,13 @@ int main(void) {
     DMA_Config(&lli);
 
     while (1) {
-        get_ADC_Value(); // Read the ADC value and update the servo position accordingly
         choose_Action(); // Check if a button was pressed and perform the corresponding action
+        get_ADC_Value(); // Read the ADC value and update the servo position accordingly
+
+        if(flag_imprimir){
+            uart_send_data(ADC_ChannelGetData(ADC_CHANNEL_0), pulseWidth); // Si no funciona, usar ADC_GlobalGetData()
+            flag_imprimir = 0;
+        }
     }
 
     return 0;
