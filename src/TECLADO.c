@@ -101,14 +101,16 @@ void choose_Action(void) {
                 LCD_Update_Status(SYSTEM_ON); // Update the LCD to system on mode
 				ADC_PowerUp();
                 ADC_BurstEnable(); // Turn on ADC
+                GPDMA_ChannelStart(GPDMA_CH_0); //Enable Channel 0 GPDMA
                 break;
             case 2:
                 LCD_Update_Status(POSITION_SET); // Update the LCD to position set mode
                 ADC_BurstDisable(); // Turn off ADC
                 break;
             case 3:
-                //Mensaje de Aviso
+                //Mensaje de Advertencia
                 LCD_Update_Status(SYSTEM_OFF); // Update the LCD to system off mode
+                GPIO_TogglePins(PORT_0, (1 << 4)); //P0.4 -> H39
                 break;
         }
     }

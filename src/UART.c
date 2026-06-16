@@ -36,6 +36,7 @@ static void uart_send_data(uint16_t adc_val, uint32_t pulse_us) {
     idx += uint32_to_str(pulse_us, &buf[idx]);
     buf[idx++] = '\r';
     buf[idx++] = '\n';
+    buf[idx++] = '\n';
 
     UART_Send(UART0, buf, idx, BLOCKING);
 }

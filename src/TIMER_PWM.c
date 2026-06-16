@@ -53,18 +53,25 @@ void servo_GPIO(void) {
 }
 
 // Function to move the servo based on joystick ADC value (0-4095)
-void servo_Position(uint16_t adcValue) {
-    if (adcValue > 4095) {
-        adcValue = 4095; // Limit the maximum ADC value to 4095 to avoid overflow
-    }
+void servo_Position(uint16_t nuevoAdc) {
+    static uint32_t adc_suavizado = 2045;
+    static uint16_t ultimo_adc_valido = 2045;
 
-    if (adcValue < 2600 && adcValue > 2300) { // In the neutral position of the joystick, the ADC
-                                              // value fluctuates between 2300 and 2600,
-        adcValue = 2045;                      // so we set it to a fixed value to avoid jitter in the servo position
-    }
+    // filtros para suavizar la señal
+    adc_suavizado = ((adc_suavizado * 3) + nuevoAdc) / 4;
+    uint16_t adc_filtrado = (uint16_t)adc_suavizado;
 
-    // Map the ADC value (0-4095) to a pulse width between 500us and 2500us
-    pulseWidth = 500 + (((uint32_t)adcValue * 2000) / 4095);
+    if (abs(adc_filtrado - ultimo_adc_valido) > 50) {
+        ultimo_adc_valido = adc_filtrado;
+    }
+    uint16_t valor_final = ultimo_adc_valido;
+
+    //rangos establecidos para zona muerta y límite del ADC
+    if (valor_final > 3900) valor_final = 4095;
+    if (valor_final < 300) valor_final = 0;
+    if (valor_final < 2200 && valor_final > 2100) valor_final = 2045;
+
+    pulseWidth = 500 + (((uint32_t)valor_final * 2000) / 4095);
 }
 
 void TIMER0_IRQHandler(void) {
