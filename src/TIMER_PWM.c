@@ -4,9 +4,9 @@
 volatile uint32_t pulseWidth = 1500; // Initial pulse width (1.5ms for neutral position)
 
 void TIMER_PWM_Config(void) {
-    TIMER_CFG_T timCfg = {0}; // Preliminar values for the timer
+    TIMER_CFG_T timCfg = {0};     // Preliminar values for the timer
     timCfg.prescaleOpt = TIM_US;
-    timCfg.prescaleValue = 1; // 1us tick
+    timCfg.prescaleValue = 1;     // 1us tick
 
     TIM_InitTimer(LPC_TIM0, &timCfg);
 
@@ -15,9 +15,9 @@ void TIMER_PWM_Config(void) {
     match0Cfg.channel = TIM_MATCH_0;
     match0Cfg.intEn = ENABLE;
     match0Cfg.stopEn = DISABLE;
-    match0Cfg.resetEn = ENABLE; // Reset when gets to 20ms
+    match0Cfg.resetEn = ENABLE;     // Reset when gets to 20ms
     match0Cfg.extOpt = TIM_NOTHING;
-    match0Cfg.matchValue = 20000; // 20ms
+    match0Cfg.matchValue = 20000;   // 20ms
 
     // Match 1: Pulse width (1-2ms)
     TIM_MATCHCFG_T match1Cfg = {0}; // Preliminar values for the match channel 1
@@ -26,13 +26,12 @@ void TIMER_PWM_Config(void) {
     match1Cfg.stopEn = DISABLE;
     match1Cfg.resetEn = DISABLE;
     match1Cfg.extOpt = TIM_NOTHING;
-    match1Cfg.matchValue = 1500; // 1.5ms (neutral position for the servo)
+    match1Cfg.matchValue = 1500;   // 1.5ms (neutral position for the servo)
 
     TIM_ConfigMatch(LPC_TIM0, &match0Cfg); // The PWM implements two match channels, one for the
                                            // period and another for the duty cycle,
-    TIM_ConfigMatch(LPC_TIM0,
-                    &match1Cfg); // one with reset and the other without, so the timer counter is
-                                 // reset on match0 and match1 is used to control the duty cycle.
+    TIM_ConfigMatch(LPC_TIM0, &match1Cfg); // one with reset and the other without, so the timer counter is
+                                           // reset on match0 and match1 is used to control the duty cycle.
 
     NVIC_EnableIRQ(TIMER0_IRQn);
     NVIC_SetPriority(TIMER0_IRQn, 0); // Set a priority for the timer interrupt
@@ -44,7 +43,7 @@ void servo_GPIO(void) {
     PINSEL_CFG_T pinCfg = {0};
     pinCfg.port = PORT_0;
     pinCfg.pin = PIN_10;
-    pinCfg.func = PINSEL_FUNC_00; // GPIO
+    pinCfg.func = PINSEL_FUNC_00; // Set function to GPIO
     pinCfg.mode = PINSEL_TRISTATE;
     pinCfg.openDrain = DISABLE;
     PINSEL_ConfigPin(&pinCfg);
@@ -61,7 +60,7 @@ void servo_Position(uint16_t adcValue) {
 
     if (adcValue < 2600 && adcValue > 2300) { // In the neutral position of the joystick, the ADC
                                               // value fluctuates between 2300 and 2600,
-        adcValue = 2045; // so we set it to a fixed value to avoid jitter in the servo position
+        adcValue = 2045;                      // so we set it to a fixed value to avoid jitter in the servo position
     }
 
     // Map the ADC value (0-4095) to a pulse width between 500us and 2500us

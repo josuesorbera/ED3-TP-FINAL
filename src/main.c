@@ -14,8 +14,8 @@ int main(void) {
     GPDMA_LLI_T lli = {0};
     lli.srcAddr = (uint32_t)&LPC_ADC->ADDR0;
     lli.dstAddr = DIR_VALADC;
-    lli.nextLLI = (uint32_t)&lli; // la apunto a si misma, luego de inicializarla
-    lli.control = (4095 | 1 << 18 | 1 << 21); // 4095 datos, dato halfword en source(18) y destination (21)
+    lli.nextLLI = (uint32_t)&lli; // Point to itself for circular mode
+    lli.control = (4095 | 1 << 18 | 1 << 21); // 4095 bytes, burst size of 1, increment source address
 
     // Call the configuration functions for each peripheral
     UART_Config();
@@ -34,7 +34,7 @@ int main(void) {
         servo_Position(adcValue);
 
         if(flag_imprimir){
-            uart_send_data(ADC_ChannelGetData(ADC_CHANNEL_0), pulseWidth); // Si no funciona, usar ADC_GlobalGetData()
+            uart_send_data(ADC_ChannelGetData(ADC_CHANNEL_0), pulseWidth); // If it doesn't work, use ADC_GlobalGetData()
             flag_imprimir = 0;
         }
     }

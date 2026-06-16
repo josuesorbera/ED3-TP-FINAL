@@ -3,7 +3,7 @@
 
 void UART_Config(void) {
 
-    UART_CFG_T UARTcfg = {0}; // le pongo valores por defecto
+    UART_CFG_T UARTcfg = {0}; // Initialize structure in 0
     UARTcfg.baudRate = 9600;
     UARTcfg.parity = UART_PARITY_NONE;
     UARTcfg.dataBits = UART_DBITS_8;

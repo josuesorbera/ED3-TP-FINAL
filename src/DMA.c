@@ -11,9 +11,9 @@ void DMA_Config(GPDMA_LLI_T* lli) {
 
     GPDMA_Channel_CFG_T configDMA = {0};
     configDMA.channelNum = GPDMA_CH_0;
-    configDMA.transferSize = 4095; // Max transfer size for 12-bit ADC
-    configDMA.type = GPDMA_P2M; // To send to a memory address
-    configDMA.dstMemAddr = DIR_VALADC;  // Escribe en el registro del DAC
+    configDMA.transferSize = 4095;      // Max transfer size for 12-bit ADC
+    configDMA.type = GPDMA_P2M;         // To send to a memory address
+    configDMA.dstMemAddr = DIR_VALADC;  // Writes the ADC value to this address
     configDMA.srcConn = GPDMA_ADC;
     configDMA.src = endCfg;
     configDMA.dst = endCfg;
