@@ -7,7 +7,7 @@
 #include "lpc17xx_gpdma.h"
 
 // Macro definitions
-
+#define DIR_VALADC 0x2007C000
 
 // Function prototypes
 void DMA_Config(GPDMA_LLI_T* lli);

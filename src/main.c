@@ -10,10 +10,10 @@
 GPDMA_LLI_T lli;
 
 int main(void) {
-    // inicializar lli en 0 y luego asignarle los valores
+    // Initialize the linked list
     GPDMA_LLI_T lli = {0};
     lli.srcAddr = (uint32_t)&LPC_ADC->ADDR0;
-    lli.dstAddr = (uint32_t)&LPC_DAC->DACR;
+    lli.dstAddr = DIR_VALADC;
     lli.nextLLI = (uint32_t)&lli; // la apunto a si misma, luego de inicializarla
     lli.control = (4095 | 1 << 18 | 1 << 21); // 4095 datos, dato halfword en source(18) y destination (21)
 
@@ -29,7 +29,9 @@ int main(void) {
 
     while (1) {
         choose_Action(); // Check if a button was pressed and perform the corresponding action
-        get_ADC_Value(); // Read the ADC value and update the servo position accordingly
+
+        uint16_t adcValue = get_ADC_Value(); // Read the ADC value and update the servo position accordingly
+        servo_Position(adcValue);
 
         if(flag_imprimir){
             uart_send_data(ADC_ChannelGetData(ADC_CHANNEL_0), pulseWidth); // Si no funciona, usar ADC_GlobalGetData()
