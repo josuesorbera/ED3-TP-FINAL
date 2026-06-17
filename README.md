@@ -52,7 +52,7 @@ Como agregado, le incluimos un script de python que es una interfaz gráfica que
 ## 💻 Softwares de utilizados:
  
 - MCUXpresso IDE: `v25.6.136`
-- TeraTerm: `v5.6.1
+- TeraTerm: `v5.6.1`
 - Python: `v3.13`
 
 ---
