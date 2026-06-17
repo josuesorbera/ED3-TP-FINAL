@@ -10,14 +10,14 @@ void TIMER_UART_Config(void) {
 
     TIM_InitTimer(LPC_TIM1, &timCfg);
 
-    // Match 0: Period of 2 seconds
+    // Match 0: Period of 1 seconds
     TIM_MATCHCFG_T match0Cfg = {0};
     match0Cfg.channel = TIM_MATCH_0;
     match0Cfg.intEn = ENABLE;
     match0Cfg.stopEn = DISABLE;
     match0Cfg.resetEn = ENABLE; // Reset when it reaches the limit
     match0Cfg.extOpt = TIM_NOTHING;
-    match0Cfg.matchValue = 2000000; // 2,000,000 us = 2s
+    match0Cfg.matchValue = 1000000; // 1,000,000 us = 1s
 
     TIM_ConfigMatch(LPC_TIM1, &match0Cfg);
 
