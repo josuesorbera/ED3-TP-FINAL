@@ -1,37 +1,41 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "LPC17xx.h"
-#include "TIMER_PWM.h"
-#include "ADC.h"
-#include "UART.h"
-#include "TECLADO.h"
-#include "I2C.h"
-#include "DMA.h"
-
-GPDMA_LLI_T lli;
+#include "../inc/ADC.h"
+#include "../inc/UART.h"
+#include "../inc/TECLADO.h"
+#include "../inc/I2C.h"
+#include "../inc/DMA.h"
+#include "../inc/LED.h"
+#include "../inc/TIMER_PWM.h"
+#include "../inc/TIMER_UART.h"
 
 int main(void) {
-	//inicializar lli en 0 y luego asignarle los valores
-	GPDMA_LLI_T lli = {0};
-	lli.srcAddr =(uint32_t)&LPC_ADC->ADDR0;
-	lli.dstAddr =(uint32_t)&LPC_DAC->DACR;
-	lli.nextLLI =(uint32_t)&lli; // la apunto a si misma, luego de inicializarla
-	lli.control =(4095 | 1<<18 | 1<<21); //4095 datos, dato halfword en source(18) y destination (21)
-
+    // Configure the Linked List Item (LLI) pointing to itself for circular DMA transfer
+    lli.srcAddr = (uint32_t)&(LPC_ADC->ADGDR);
+    lli.dstAddr = (uint32_t)adc_buffer;
+    lli.nextLLI = (uint32_t)&lli;
+    // Control LLI: 64 samples | Source 32 bits | Destination 32 bits | Auto-increment in RAM | Int
+    // Enable
+    lli.control = (SAMPLES | (2 << 18) | (2 << 21) | (1 << 27) | (1UL << 31));
     // Call the configuration functions for each peripheral
     UART_Config();
     TECLADO_Config();
-    TIMER_PWM_Config();
     servo_GPIO();
+    TIMER_PWM_Config();
+    TIMER_UART_Config();
+    LED_Config();
     I2C_Config();
+    LCD_Init();
     ADC_Config();
-    DMA_Config(GPDMA_LLI_T* lli);
+    DMA_Config();
 
     while (1) {
-        get_ADC_Value(); // Read the ADC value and update the servo position accordingly
-        choose_Action(); // Check if a button was pressed and perform the corresponding action
+        choose_Action();
+        if (flag_imprimir == 1) {
+            uart_send_data(adcValue, pulseWidth);
+            flag_imprimir = 0;
+        }
     }
-
     return 0;
 }
-
-

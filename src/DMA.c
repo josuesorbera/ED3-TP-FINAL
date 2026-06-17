@@ -1,33 +1,64 @@
 #include <stdio.h>
 #include "DMA.h"
+#include "lpc17xx_uart.h"
 
-void DMA_Config(GPDMA_LLI_T* lli){
-	GPDMA_Init();
+volatile uint16_t adcValue = 1500;
+volatile uint32_t pulseWidth = 1500;
+volatile uint32_t adc_buffer[SAMPLES];
+GPDMA_LLI_T lli;
 
-	GPDMA_Endpoint_T endCfg = {0};
-	    endCfg.width = GPDMA_HALFWORD;
-	    endCfg.burst = GPDMA_BSIZE_1;
-	    endCfg.increment = DISABLE;
+void DMA_Config(void) {
+    GPDMA_Init();
 
-	GPDMA_Channel_CFG_T configDMA = {0};
-	configDMA.channelNum = GPDMA_CH_0;
-	configDMA.transferSize = 4095; //para hacer la maxima cantidad de transferencias y luego reconfigurar
-	configDMA.type = GPDMA_P2M; //tratamos al DAC como memoria, ya que aguanta la frecuencia de muestreo
-	//de 200kHz del ADC y queremos la mayor velocidad de transferencia
-	configDMA.srcMemAddr = (uint32_t)&LPC_ADC->ADDR0; // Lee del registro del Canal 0 o el global
-	configDMA.dstMemAddr = (uint32_t)&LPC_DAC->DACR;  // Escribe en el registro del DAC
-	configDMA.srcConn = GPDMA_ADC;
-	//configDMA.dstConn = 0; el destino es memoria por lo que queda en 0
-	configDMA.src = endCfg;
-	configDMA.dst = endCfg;
-	configDMA.intTC = DISABLE;
-	configDMA.intErr = DISABLE;
-	configDMA.linkedList = (uint32_t)lli; //sin ampersand
+    // Configure channel
+    GPDMA_Endpoint_T srcCfg = {0};
+    srcCfg.width = GPDMA_WORD;
+    srcCfg.burst = GPDMA_BSIZE_1;
+    srcCfg.increment = DISABLE;
 
+    GPDMA_Endpoint_T dstCfg = {0};
+    dstCfg.width = GPDMA_WORD;
+    dstCfg.burst = GPDMA_BSIZE_1;
+    dstCfg.increment = ENABLE;
 
-	GPDMA_SetupChannel(&configDMA);
-	GPDMA_ChannelStart(GPDMA_CH_0);
+    GPDMA_Channel_CFG_T configDMA = {0};
+    configDMA.channelNum = GPDMA_CH_0;
+    configDMA.transferSize = SAMPLES;
+    configDMA.type = GPDMA_P2M;
+    configDMA.srcMemAddr = (uint32_t)&(LPC_ADC->ADGDR);
+    configDMA.dstMemAddr = (uint32_t)adc_buffer;
+    configDMA.srcConn = GPDMA_ADC;
+    configDMA.src = srcCfg;
+    configDMA.dst = dstCfg;
+    configDMA.intTC = ENABLE;
+    configDMA.intErr = ENABLE;
 
-// Falta el otro canal del GPDMA para transferencia ADC a UART
+    // Give pointer of the LLI to the driver
+    configDMA.linkedList = (uint32_t)&lli;
 
+    GPDMA_SetupChannel(&configDMA);
+    NVIC_EnableIRQ(DMA_IRQn);
+    NVIC_SetPriority(DMA_IRQn, 1);
+}
+
+void DMA_IRQHandler(void) { // Handler to update every time the DMA interrupts
+    if (GPDMA_IntGetStatus(GPDMA_INTTC, GPDMA_CH_0)) {
+        GPDMA_ClearIntPending(GPDMA_CLR_INTTC, GPDMA_CH_0);
+
+        uint32_t suma_total = 0;
+
+        for (int i = 0; i < SAMPLES; i++) {
+            suma_total += ((adc_buffer[i] >> 4) & 0xFFF);
+        }
+
+        // Average of the 64 samples
+        adcValue = (uint16_t)(suma_total / SAMPLES);
+
+        // Moves the servo
+        servo_Position(adcValue);
+    }
+
+    if (GPDMA_IntGetStatus(GPDMA_INTERR, GPDMA_CH_0)) {
+        GPDMA_ClearIntPending(GPDMA_CLR_INTERR, GPDMA_CH_0);
+    }
 }

@@ -1,0 +1,44 @@
+# .clang-format para ED3-TP-FINAL
+# Estilo basado en LLVM con ajustes para coincidir con el estilo
+BasedOnStyle: LLVM
+
+# Indentación
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# Llaves: función/if/for/while en la misma línea (estilo K&R)
+BreakBeforeBraces: Attach
+
+# Punteros pegados al tipo: uint32_t* var  (en vez de uint32_t *var)
+PointerAlignment: Left
+
+# Límite de columna razonable para código embebido
+ColumnLimit: 100
+
+# No colapsar funciones/if cortos en una sola línea
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+# Espacio antes de paréntesis solo en control de flujo (if, for, while)
+SpaceBeforeParens: ControlStatements
+
+# Alinear comentarios consecutivos a la derecha del código
+AlignTrailingComments: true
+
+# Ordenar #includes: NO reordenar (los drivers a veces dependen del orden)
+SortIncludes: false
+
+# Espacios alrededor de operadores binarios
+SpaceBeforeAssignmentOperators: true
+SpacesInParentheses: false
+
+# Líneas en blanco: máximo 1 consecutiva
+MaxEmptyLinesToKeep: 1
+
+# Indentar etiquetas de case respecto a switch
+IndentCaseLabels: true
+
+# Continuaciones de línea
+ContinuationIndentWidth: 4

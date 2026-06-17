@@ -3,13 +3,13 @@
 
 // Libraries inclusion
 #include <stdio.h>
+#include <stdlib.h>
 #include "LPC17xx.h"
 #include "lpc17xx_timer.h"
 #include "lpc17xx_gpio.h"
-#include "ADC.h"
+#include "lpc17xx_pinsel.h"
 
-// Macro definitions
-static volatile uint32_t pulseWidth = 1500; // Initial pulse width (1.5ms for neutral position)
+// global variables
 
 // Function prototypes
 void TIMER_PWM_Config(void);
