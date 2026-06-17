@@ -43,14 +43,6 @@ void LCD_Init(void) {
     LCD_Send_Byte(0x03, 0);
     LCD_Send_Byte(0x02, 0);
 
-    /*
-    for(volatile uint32_t i=0;i<1000000;i++);
-    LCD_Send_Byte(0x33,0);
-    for(volatile uint32_t i=0;i<50000;i++);
-    LCD_Send_Byte(0x32,0);
-    for(volatile uint32_t i=0;i<50000;i++);
-	*/    
-
     // LCD configuration
     LCD_Send_Byte(0x28, 0); // 2 lines, 5x8 font
     LCD_Send_Byte(0x0C, 0); // Display ON, cursor OFF
@@ -124,10 +116,11 @@ void LCD_Update_Status(system_state_t state) {
         break;
 
         case SYSTEM_OFF:
-            LCD_Send_String("SISTEMA APAGADO");
+            LCD_Send_String("ALARMA");
             LCD_Set_Cursor(1, 0);
             LCD_Send_String("                "); // Clean line
             LCD_Set_Cursor(1, 0);
+            LCD_Send_String("ACTIVADA");
         break;
 
         case POSITION_SET:

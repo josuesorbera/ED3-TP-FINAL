@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include "DMA.h"
+#include "lpc17xx_uart.h"
+
+volatile uint16_t adcValue = 1500;
+volatile uint32_t pulseWidth = 1500;
+volatile uint32_t adc_buffer[SAMPLES];
+GPDMA_LLI_T lli;
 
 void DMA_Config(void) {
     GPDMA_Init();
-
-    //Configuramos la estructura LLI circular apuntando a sí misma
-    lli.srcAddr = (uint32_t)&(LPC_ADC->ADGDR);
-    lli.dstAddr = (uint32_t)adc_buffer;
-    lli.nextLLI = (uint32_t)&lli;
-    // Control LLI: 64 muestras | Origen 32 bits | Destino 32 bits | Auto-incremento en RAM | Int Enable
-    lli.control = (SAMPLES | (2 << 18) | (2 << 21) | (1 << 27) | (1UL << 31));
 
     //Configuramos el canal
     GPDMA_Endpoint_T srcCfg = {0};
@@ -38,11 +37,9 @@ void DMA_Config(void) {
     configDMA.linkedList = (uint32_t)&lli;
 
     GPDMA_SetupChannel(&configDMA);
-
     NVIC_EnableIRQ(DMA_IRQn);
     NVIC_SetPriority(DMA_IRQn, 1);
 }
-
 
 void DMA_IRQHandler(void) { //Handler para actualizar cada vez que interrumpe DMA
     if (GPDMA_IntGetStatus(GPDMA_INTTC, GPDMA_CH_0)) {

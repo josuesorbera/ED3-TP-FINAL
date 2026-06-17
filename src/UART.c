@@ -18,7 +18,7 @@ void UART_Config(void) {
     UART_TxEnable(UART0);
 }
 
-static void uart_send_data(uint16_t adc_val, uint32_t pulse_us) {
+void uart_send_data(uint16_t adc_val, uint32_t pulse_us) {
     uint8_t buf[32];
     uint8_t idx = 0;
 
@@ -41,7 +41,7 @@ static void uart_send_data(uint16_t adc_val, uint32_t pulse_us) {
     UART_Send(UART0, buf, idx, BLOCKING);
 }
 
-static uint8_t uint32_to_str(uint32_t val, uint8_t* buf) {
+uint8_t uint32_to_str(uint32_t val, uint8_t* buf) {
     uint8_t digits[10];
     uint8_t n = 0;
     if (val == 0) {

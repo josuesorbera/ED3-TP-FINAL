@@ -13,6 +13,5 @@
 
 // Function prototypes
 void ADC_Config(void);
-uint16_t get_ADC_Value(void);
 
 #endif // ADC_H

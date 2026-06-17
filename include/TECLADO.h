@@ -9,6 +9,7 @@
 #include "lpc17xx_systick.h"
 #include "ADC.h"
 #include "TIMER_PWM.h"
+#include "I2C.h"
 
 // Macro definitions
 extern volatile uint8_t tecla_presionada;

@@ -1,6 +1,6 @@
 #include "LED.h"
 
-LED_Config(void) {
+void LED_Config(void) {
     PINSEL_CFG_T pinCfg = {0};
     pinCfg.port = PORT_0;
     pinCfg.pin = PIN_4; // P0.22

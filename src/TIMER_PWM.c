@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include "TIMER_PWM.h"
-
-volatile uint32_t pulseWidth = 1500; // Initial pulse width (1.5ms for neutral position)
+#include "DMA.h"
 
 void TIMER_PWM_Config(void) {
-    TIMER_CFG_T timCfg = {0};     // Preliminar values for the timer
+    TIM_TIMERCFG_T timCfg = {0};     // Preliminar values for the timer
     timCfg.prescaleOpt = TIM_US;
     timCfg.prescaleValue = 1;     // 1us tick
 
@@ -39,7 +38,7 @@ void TIMER_PWM_Config(void) {
 }
 
 void servo_GPIO(void) {
-    
+
     PINSEL_CFG_T pinCfg = {0};
     pinCfg.port = PORT_0;
     pinCfg.pin = PIN_10;
@@ -47,7 +46,7 @@ void servo_GPIO(void) {
     pinCfg.mode = PINSEL_TRISTATE;
     pinCfg.openDrain = DISABLE;
     PINSEL_ConfigPin(&pinCfg);
-    
+
     GPIO_SetDir(PORT_0, (1 << 10), GPIO_OUTPUT); // Set the pin (P0.10) as output
     GPIO_ClearPins(PORT_0, (1 << 10));
 }

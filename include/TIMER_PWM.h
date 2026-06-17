@@ -3,13 +3,13 @@
 
 // Libraries inclusion
 #include <stdio.h>
+#include <stdlib.h>
 #include "LPC17xx.h"
 #include "lpc17xx_timer.h"
 #include "lpc17xx_gpio.h"
 #include "lpc17xx_pinsel.h"
 
-// global variables 
-extern volatile uint32_t pulseWidth;
+// global variables
 
 // Function prototypes
 void TIMER_PWM_Config(void);
