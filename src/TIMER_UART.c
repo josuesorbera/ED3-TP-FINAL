@@ -10,7 +10,7 @@ void TIMER_UART_Config(void) {
 
     TIM_InitTimer(LPC_TIM1, &timCfg);
 
-    // Match 0: Período de 2 segundos
+    // Match 0: Period of 2 seconds
     TIM_MATCHCFG_T match0Cfg = {0};
     match0Cfg.channel = TIM_MATCH_0;
     match0Cfg.intEn = ENABLE;
@@ -22,8 +22,7 @@ void TIMER_UART_Config(void) {
     TIM_ConfigMatch(LPC_TIM1, &match0Cfg);
 
     NVIC_EnableIRQ(TIMER1_IRQn);
-    NVIC_SetPriority(TIMER1_IRQn,
-                     2); // Low priority to not interfere with the servo control and button reading
+    NVIC_SetPriority(TIMER1_IRQn, 2); // Low priority to not interfere with the servo control and button reading
     TIM_Enable(LPC_TIM1);
 }
 

@@ -10,7 +10,7 @@ GPDMA_LLI_T lli;
 void DMA_Config(void) {
     GPDMA_Init();
 
-    // Configuramos el canal
+    // Configure channel
     GPDMA_Endpoint_T srcCfg = {0};
     srcCfg.width = GPDMA_WORD;
     srcCfg.burst = GPDMA_BSIZE_1;
@@ -33,7 +33,7 @@ void DMA_Config(void) {
     configDMA.intTC = ENABLE;
     configDMA.intErr = ENABLE;
 
-    // Le pasamos el puntero de la LLI al driver
+    // Give pointer of the LLI to the driver
     configDMA.linkedList = (uint32_t)&lli;
 
     GPDMA_SetupChannel(&configDMA);
@@ -41,7 +41,7 @@ void DMA_Config(void) {
     NVIC_SetPriority(DMA_IRQn, 1);
 }
 
-void DMA_IRQHandler(void) { // Handler para actualizar cada vez que interrumpe DMA
+void DMA_IRQHandler(void) { // Handler to update every time the DMA interrupts
     if (GPDMA_IntGetStatus(GPDMA_INTTC, GPDMA_CH_0)) {
         GPDMA_ClearIntPending(GPDMA_CLR_INTTC, GPDMA_CH_0);
 
@@ -51,10 +51,10 @@ void DMA_IRQHandler(void) { // Handler para actualizar cada vez que interrumpe D
             suma_total += ((adc_buffer[i] >> 4) & 0xFFF);
         }
 
-        // Promedio de las 64 muestras
+        // Average of the 64 samples
         adcValue = (uint16_t)(suma_total / SAMPLES);
 
-        // Se mueve el servo
+        // Moves the servo
         servo_Position(adcValue);
     }
 

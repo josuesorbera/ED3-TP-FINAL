@@ -11,11 +11,11 @@
 #include "../inc/TIMER_UART.h"
 
 int main(void) {
-    // Configuramos la estructura LLI circular apuntando a sí misma
+    // Configure the Linked List Item (LLI) pointing to itself for circular DMA transfer
     lli.srcAddr = (uint32_t)&(LPC_ADC->ADGDR);
     lli.dstAddr = (uint32_t)adc_buffer;
     lli.nextLLI = (uint32_t)&lli;
-    // Control LLI: 64 muestras | Origen 32 bits | Destino 32 bits | Auto-incremento en RAM | Int
+    // Control LLI: 64 samples | Source 32 bits | Destination 32 bits | Auto-increment in RAM | Int
     // Enable
     lli.control = (SAMPLES | (2 << 18) | (2 << 21) | (1 << 27) | (1UL << 31));
     // Call the configuration functions for each peripheral
