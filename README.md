@@ -45,7 +45,7 @@ Como agregado, le incluimos un script de python que es una interfaz gráfica que
 ---
 
 ## 📊 Diagrama de control:
-
+<img alt="diagrama de control.png" data-hpc="true" containertiming="hpc" src="https://github.com/josuesorbera/ED3-TP-FINAL/blob/Develop/diagrama%20de%20control.png?raw=true" style="max-width: 100%;">
 
 ---
 
