@@ -6,9 +6,10 @@ volatile uint8_t tecla_presionada = 0xFF;
 volatile uint8_t flag_teclado = 0;
 
 void TECLADO_Config(void) {
-    SYSTICK_InternalInit(20); // Configure SysTick to generate an interrupt every 20ms to read the keyboard
+    SYSTICK_InternalInit(
+        20); // Configure SysTick to generate an interrupt every 20ms to read the keyboard
 
-    PINSEL_CFG_T configPin = {0};     // Struct to configure the pins, initialized to zero
+    PINSEL_CFG_T configPin = {0}; // Struct to configure the pins, initialized to zero
     // Configure rows P2.0 and P2.1
     configPin.port = PORT_2;
     configPin.func = PINSEL_FUNC_00;
@@ -33,7 +34,8 @@ void TECLADO_Config(void) {
 
 // Handler to detect the button pressed
 void EINT3_IRQHandler(void) {
-    NVIC_DisableIRQ(EINT3_IRQn);     // Disable interruptions to avoid noise while waiting for the Sysyick
+    NVIC_DisableIRQ(
+        EINT3_IRQn); // Disable interruptions to avoid noise while waiting for the Sysyick
     GPIO_ClearInt(PORT_2, (1 << 2)); // Set flag for column 1
     GPIO_ClearInt(PORT_2, (1 << 3)); // Set flag for column 2
     NVIC_ClearPendingIRQ(EINT3_IRQn);
@@ -52,17 +54,20 @@ void SysTick_Handler(void) {
     GPIO_ClearPins(PORT_2, (1 << 1)); // Row 2 at 0V
 
     uint32_t puerto = GPIO_ReadValue(PORT_2);
-    if ((puerto & (1 << 2)) == 0) estado_actual = 1;      // R1-C1
-    else if ((puerto & (1 << 3)) == 0) estado_actual = 3; // R1-C2
+    if ((puerto & (1 << 2)) == 0)
+        estado_actual = 1; // R1-C1
+    else if ((puerto & (1 << 3)) == 0)
+        estado_actual = 3; // R1-C2
 
     // Scan row 2
     GPIO_ClearPins(PORT_2, (1 << 0)); // Row 1 at 0V
     GPIO_SetPins(PORT_2, (1 << 1));   // Row 2 at 3.3V
 
     puerto = GPIO_ReadValue(PORT_2);
-    if ((puerto & (1 << 2)) == 0) estado_actual = 2;      // R2-C1
-    else if ((puerto & (1 << 3)) == 0) estado_actual = 4; // R2-C2
-
+    if ((puerto & (1 << 2)) == 0)
+        estado_actual = 2; // R2-C1
+    else if ((puerto & (1 << 3)) == 0)
+        estado_actual = 4; // R2-C2
 
     // Block logic for pulse detection and release detection
     if (estado_actual != 0xFF) { // If the button was pressed, it entrys the if
@@ -98,21 +103,21 @@ void choose_Action(void) {
     if (flag_teclado == 1) {
         switch (tecla_presionada) {
             case 1:
-                LCD_Update_Status(SYSTEM_ON); // Update the LCD to system on mode
-                GPDMA_ChannelStart(GPDMA_CH_0); //Enable Channel 0 GPDMA
-                ADC_BurstEnable(); // Turn on ADC
-                GPIO_ClearPins(PORT_0, (1<<4)); //P0.4 -> H39
+                LCD_Update_Status(SYSTEM_ON);     // Update the LCD to system on mode
+                GPDMA_ChannelStart(GPDMA_CH_0);   // Enable Channel 0 GPDMA
+                ADC_BurstEnable();                // Turn on ADC
+                GPIO_ClearPins(PORT_0, (1 << 4)); // P0.4 -> H39
                 break;
 
             case 2:
                 LCD_Update_Status(POSITION_SET); // Update the LCD to position set mode
-                ADC_BurstDisable(); // Turn off ADC
+                ADC_BurstDisable();              // Turn off ADC
                 break;
 
             case 3:
-                //Mensaje de Advertencia
-                LCD_Update_Status(SYSTEM_OFF); // Update the LCD to system off mode
-                GPIO_SetPins(PORT_0, (1 << 4)); //P0.4 -> H39
+                // Mensaje de Advertencia
+                LCD_Update_Status(SYSTEM_OFF);  // Update the LCD to system off mode
+                GPIO_SetPins(PORT_0, (1 << 4)); // P0.4 -> H39
                 break;
         }
     }

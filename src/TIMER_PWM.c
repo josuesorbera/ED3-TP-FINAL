@@ -3,9 +3,9 @@
 #include "DMA.h"
 
 void TIMER_PWM_Config(void) {
-    TIM_TIMERCFG_T timCfg = {0};     // Preliminar values for the timer
+    TIM_TIMERCFG_T timCfg = {0}; // Preliminar values for the timer
     timCfg.prescaleOpt = TIM_US;
-    timCfg.prescaleValue = 1;     // 1us tick
+    timCfg.prescaleValue = 1; // 1us tick
 
     TIM_InitTimer(LPC_TIM0, &timCfg);
 
@@ -14,9 +14,9 @@ void TIMER_PWM_Config(void) {
     match0Cfg.channel = TIM_MATCH_0;
     match0Cfg.intEn = ENABLE;
     match0Cfg.stopEn = DISABLE;
-    match0Cfg.resetEn = ENABLE;     // Reset when gets to 20ms
+    match0Cfg.resetEn = ENABLE; // Reset when gets to 20ms
     match0Cfg.extOpt = TIM_NOTHING;
-    match0Cfg.matchValue = 20000;   // 20ms
+    match0Cfg.matchValue = 20000; // 20ms
 
     // Match 1: Pulse width (1-2ms)
     TIM_MATCHCFG_T match1Cfg = {0}; // Preliminar values for the match channel 1
@@ -25,12 +25,13 @@ void TIMER_PWM_Config(void) {
     match1Cfg.stopEn = DISABLE;
     match1Cfg.resetEn = DISABLE;
     match1Cfg.extOpt = TIM_NOTHING;
-    match1Cfg.matchValue = 1500;   // 1.5ms (neutral position for the servo)
+    match1Cfg.matchValue = 1500; // 1.5ms (neutral position for the servo)
 
     TIM_ConfigMatch(LPC_TIM0, &match0Cfg); // The PWM implements two match channels, one for the
                                            // period and another for the duty cycle,
-    TIM_ConfigMatch(LPC_TIM0, &match1Cfg); // one with reset and the other without, so the timer counter is
-                                           // reset on match0 and match1 is used to control the duty cycle.
+    TIM_ConfigMatch(LPC_TIM0,
+                    &match1Cfg); // one with reset and the other without, so the timer counter is
+                                 // reset on match0 and match1 is used to control the duty cycle.
 
     NVIC_EnableIRQ(TIMER0_IRQn);
     NVIC_SetPriority(TIMER0_IRQn, 0); // Set a priority for the timer interrupt
@@ -65,10 +66,13 @@ void servo_Position(uint16_t nuevoAdc) {
     }
     uint16_t valor_final = ultimo_adc_valido;
 
-    //rangos establecidos para zona muerta y límite del ADC
-    if (valor_final > 3900) valor_final = 4095;
-    if (valor_final < 300) valor_final = 0;
-    if (valor_final < 2200 && valor_final > 2100) valor_final = 2045;
+    // rangos establecidos para zona muerta y límite del ADC
+    if (valor_final > 3900)
+        valor_final = 4095;
+    if (valor_final < 300)
+        valor_final = 0;
+    if (valor_final < 2200 && valor_final > 2100)
+        valor_final = 2045;
 
     pulseWidth = 500 + (((uint32_t)valor_final * 2000) / 4095);
 }

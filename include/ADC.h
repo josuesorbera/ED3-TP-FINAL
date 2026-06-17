@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include "LPC17xx.h"
 #include "lpc17xx_adc.h"
-// #include "TIMER_PWM.h"
 #include "DMA.h"
 
 // Macro definitions

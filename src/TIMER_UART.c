@@ -22,7 +22,8 @@ void TIMER_UART_Config(void) {
     TIM_ConfigMatch(LPC_TIM1, &match0Cfg);
 
     NVIC_EnableIRQ(TIMER1_IRQn);
-    NVIC_SetPriority(TIMER1_IRQn, 2); // Low priority to not interfere with the servo control and button reading
+    NVIC_SetPriority(TIMER1_IRQn,
+                     2); // Low priority to not interfere with the servo control and button reading
     TIM_Enable(LPC_TIM1);
 }
 

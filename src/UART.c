@@ -9,7 +9,8 @@ void UART_Config(void) {
     UARTcfg.dataBits = UART_DBITS_8;
     UARTcfg.stopBits = UART_STOPBIT_1;
 
-    UART_FIFO_CFG_T fifo_cfg = {.resetRxBuf = ENABLE, .resetTxBuf = ENABLE, .dmaMode = DISABLE, .level = UART_FIFO_TRGLEV0};
+    UART_FIFO_CFG_T fifo_cfg = {
+        .resetRxBuf = ENABLE, .resetTxBuf = ENABLE, .dmaMode = DISABLE, .level = UART_FIFO_TRGLEV0};
 
     UART_PinConfig(UART_TX0_P0_2);
     UART_PinConfig(UART_RX0_P0_3);
